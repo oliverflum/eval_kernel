@@ -32,4 +32,4 @@ let () =
   let res_dns = resolver_dns stack in
   let conduit = conduit_direct stack in
   let job =  [ main $ default_time $ default_posix_clock $ res_dns $ conduit ] in
-  register "store" job
+  register "eval-kernel" job
