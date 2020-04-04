@@ -16,12 +16,14 @@ module Main (TIME: Mirage_time.S) (PClock: Mirage_clock.PCLOCK) (RES: Resolver_l
   let f1 store =
     let n = S.to_int (store#get "count" (S.VInt 0)) in
     if n == 0 then begin
-      Logs.info (fun m -> m "HELLO... (%i)" n);
+      let tstr = C.time () in
+      Logs.info (fun m -> m "%s HELLO... (%i)" tstr n);
       store#set "count" (S.VInt (n+1));
       TIME.sleep_ns (Duration.of_sec 1) >>= fun () ->
       Lwt.return ()
     end else begin
-      Logs.info (fun m -> m "AGAIN (%i)" n);
+      let tstr = C.time () in
+      Logs.info (fun m -> m "%s AGAIN (%i)" tstr n);
       store#set "count" (S.VInt (n+1));
       TIME.sleep_ns (Duration.of_sec 1) >>= fun () ->
       Lwt.return ()
@@ -64,7 +66,6 @@ module Main (TIME: Mirage_time.S) (PClock: Mirage_clock.PCLOCK) (RES: Resolver_l
 
   let rec run store (client: OS.Xs.client) (curr: string) =
     C.read_shutdown_value client >>= fun status ->
-    Logs.info (fun m -> m "Read control message %s" (Control.Status.string_of_status status));
     match status with
       | Control.Status.Resume -> begin
           let f = get_function curr in
