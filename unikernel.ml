@@ -18,14 +18,16 @@ module Main (TIME: Mirage_time.S) (PClock: Mirage_clock.PCLOCK) (RES: Resolver_l
     if n == 0 then begin
       let tstr = C.time () in
       Logs.info (fun m -> m "%s HELLO... (%i)" tstr n);
-      store#set "count" (S.VInt (n+1));
       TIME.sleep_ns (Duration.of_sec 1) >>= fun () ->
+      Logs.info (fun m -> m "Slept 1s: %s" tstr);
+      store#set "count" (S.VInt (n+1));
       Lwt.return ()
     end else begin
       let tstr = C.time () in
       Logs.info (fun m -> m "%s AGAIN (%i)" tstr n);
-      store#set "count" (S.VInt (n+1));
       TIME.sleep_ns (Duration.of_sec 1) >>= fun () ->
+      Logs.info (fun m -> m "Slept 1s: %s" tstr);
+      store#set "count" (S.VInt (n+1));
       Lwt.return ()
     end
   (*The function passed on termination*)
