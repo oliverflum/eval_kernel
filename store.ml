@@ -192,11 +192,12 @@ class webStore ctx resolver repo token id host_id =
       if repo <> "" then begin
         Logs.info (fun m -> m "Using repo: %s" repo);
         if migration then begin
-          self#post_ready time>>= fun _ ->
+          self#post_ready time >>= fun _ ->
           steady () >>= fun _ -> 
           self#get_state time >>= fun _ ->
           Lwt.return true
         end else begin
+          steady () >>= fun _ ->
           self#get_state time >>= fun _ ->
           Lwt.return true
         end
